@@ -38,12 +38,20 @@ def ticked_delete(id):
     except Exception:
         return jsonify({'error':'INVALID_SESSION'}),400
 
-    try:
-        ticket = Ticket.query.get_or_404(id)
-        db.session.delete(ticket)
-        db.session.commit()
-    except Exception:
-        return jsonify({'error':'INVALID_SESSION'}),500
+    user_id = userdata.get('id')
+    role = userdata.get('role')
+
+    ticket = Ticket.query.get_or_404(id)
+
+    if user_id != ticket.user_id:
+            return jsonify({'forbidden': 'wrong user id'}), 403
+    else:
+        try:
+            db.session.delete(ticket)
+            db.session.commit()
+        except Exception:
+            return jsonify({'error':'INVALID_SESSION'}),500
+    
     return jsonify({}), 200
 
 @main_page.route('/ticket/list')
@@ -70,7 +78,7 @@ def ticked_list():
 @main_page.route('/ticket/edit/<id>', methods=['PUT'])
 def ticked_edit(id):
     data = request.json
-    if data is not None and all(key in data for key in ('session', 'task_id', 'title', 'body', 'TicketType')): #! save session
+    if data is not None and all(key in data for key in ('session', 'task_id', 'title', 'body', 'TicketType')):
         print("Works")
     else:
         return jsonify({'error': 'Missing Keys'}), 510
@@ -98,7 +106,7 @@ def ticked_edit(id):
         else:
             return jsonify({}), 500
 
-    if role == 1 or role == 2:
+    if role == 1 or role == 0:
         ticked_q = Ticket.query.get_or_404(ticketId=id).first()
 
         if user_id != ticked_q.user_id:
