@@ -1,6 +1,5 @@
 flask==1.1.1
 pyjwt===1.7.1
 flask_sqlalchemy===2.4.1
-flask_marschmallow===0.11.0
 marshmallow-sqlalchemy==0.22.3
 pymysql==0.9.3
