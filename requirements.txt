@@ -1,1 +1,6 @@
 flask
+pyjwt
+flask_sqlalchemy
+flask_marschmallow
+marshmallow-sqlalchemy
+pyjwt
