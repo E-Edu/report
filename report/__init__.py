@@ -7,10 +7,14 @@ import pymysql
 
 app = Flask(__name__)
 
+
+
 try:
     db_path = "mysql+pymysql://" + os.environ.get("DATABASE_USERNAME") + ":" + os.environ.get("DATABASE_PASSWORD") + "@" + os.environ.get("DATABASE_HOSTNAME") + ":" + os.environ.get("DATABASE_PORT") + "/" + os.environ.get("DATABASE_DATABASE")
     app.config['SQLALCHEMY_DATABASE_URI'] = db_path
-except TypeError:
+except TypeError as e:
+    print(e)
+    print("No Environ Var found")
     sys.exit(1)
 
 

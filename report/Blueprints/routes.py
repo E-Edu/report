@@ -1,9 +1,11 @@
-from flask import Blueprint, request, jsonify, redirect
-from report.database import Ticket
-from report import db
-import jwt
-import os
 import json
+import os
+
+import jwt
+from flask import Blueprint, request, jsonify
+
+from report import db
+from report.database import Ticket
 
 main_page = Blueprint('main-routes', __name__)
 
@@ -12,18 +14,19 @@ main_page = Blueprint('main-routes', __name__)
 def ticked_create():
     data = request.json
     header = request.headers.get('Authorization')
-    
+
     if data is None:
         return jsonify({'error': 'Missing Keys'}), 400
 
     try:
-        userdata = jwt.decode(header, os.environ.get('JWT_SECRET'), algorithms=['ES256'])
-    except Exception:
+        userdata = jwt.decode(header, os.environ.get('JWT_SECRET'), algorithms=['HS256'])
+    except Exception as e:
+        print(e)
         return jsonify({'error': 'INVALID_SESSION'}), 400
 
     user_id = userdata.get("id")
 
-    ticket = Ticket(taskid=data['task_id'], title=data['title'],
+    ticket = Ticket(taskId=data['task_id'], title=data['title'],
                     body=data['body'], TicketType=data['TicketType'], user_id=user_id)
     db.session.add(ticket)
     db.session.commit()
@@ -34,12 +37,12 @@ def ticked_create():
 def ticked_delete(id):
     data = request.headers.get('Authorization')
     try:
-        userdata = jwt.decode(data['session'], os.environ.get(
-            'JWT_SECRET'), algorithms=['ES256'])
+        userdata = jwt.decode(data, os.environ.get(
+            'JWT_SECRET'), algorithms=['HS256'])
     except Exception:
 
         return jsonify({'error': 'INVALID_SESSION'}), 400
-    
+
     if id is None and id > 0:
         return jsonify({'error': 'MISSING_DATA'}), 400
     try:
@@ -58,7 +61,7 @@ def ticked_list():
 
     try:
         userdata = jwt.decode(header, os.environ.get(
-            'JWT_SECRET'), algorithms=['ES256'])
+            'JWT_SECRET'), algorithms=['HS256'])
     except Exception:
         return jsonify({'error': 'INVALID_SESSION'}), 400
 
@@ -67,7 +70,11 @@ def ticked_list():
 
     if role == 2:
         all_q = Ticket.query.all()
-        output = json.dump(all_q)
+        output = []
+        for i in all_q:
+            a = i.__dict__
+            a.pop('_sa_instance_state')
+            output.append(a)
         return jsonify(output)
     else:
         return jsonify({}), 500
@@ -75,26 +82,27 @@ def ticked_list():
 
 @main_page.route('/ticket/edit/<id>', methods=['PUT'])
 def ticked_edit(id):
-
     data = request.json
-    if data is not None and all(key in data for key in ('session', 'task_id', 'title', 'body', 'TicketType')):
-        print("Works")
+    header = request.headers.get('Authorization')
+
+    if data is not None and all(key in data for key in ('task_id', 'title', 'body', 'TicketType')):
+        pass
     else:
         return jsonify({'error': 'Missing Keys'}), 510
 
     try:
         userdata = jwt.decode(header, os.environ.get(
-            'JWT_SECRET'), algorithms=['ES256'])
+            'JWT_SECRET'), algorithms=['HS256'])
     except Exception:
         return jsonify({'error': 'Invalid Session'}), 510
 
     user_id = userdata.get('id')
     role = userdata.get('role')
-
+    print(id)
     if role == 2:
-        ticked_q = Ticket.query.get_or_404(ticketId=id).first()
+        ticked_q = Ticket.query.get_or_404(id)
         if ticked_q is not None:
-            ticked_q.taskId = data['task_Id']
+            ticked_q.taskId = data['task_id']
             ticked_q.title = data['title']
             ticked_q.body = data['body']
             ticked_q.TicketType = data['TicketType']
@@ -107,7 +115,7 @@ def ticked_edit(id):
             return jsonify({}), 500
 
     if role == 1 or role == 0:
-        ticked_q = Ticket.query.get_or_404(ticketId=id).first()
+        ticked_q = Ticket.query.get_or_404(id)
 
         if user_id != ticked_q.user_id:
             return jsonify({'forbidden': 'wrong user id'}), 403
