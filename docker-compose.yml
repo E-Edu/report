@@ -1,3 +1,32 @@
-# Please fill out with content
-
 version: '3.7'
+
+report_database:
+    image: mariadb:latest
+    volumes:
+      - /var/data/mariadb:/var/lib/mysql    # to save the mariadb content
+    ports:
+      - 3306:3306   #debug
+    environment:
+      - MYSQL_ROOT_PASSWORD=da7tnqw79e5v6nbqw3v5rtwev57mtwm5vrftw75vfnm275v2
+      - MYSQL_USER=report
+      - MYSQL_PASSWORD=TuqWuRdjLbSPTRqBnnEU24ZSsqAy9b6LbXA8ZuQg
+      - MYSQL_DATABASE=report
+    restart: unless-stopped
+    container_name: report_database
+    hostname: report_database
+
+report_microservice:
+    image: eedu/reportms
+    ports: 
+        - 5000:5000
+    environment: 
+        - DATABASE_HOSTNAME=
+        - DATABASE_PORT=
+        - DATABASE_USERNAME=
+        - DATABASE_PASSWORD=
+        - DATABASE_DATABASE=
+        - JWT_SECRET=
+        - SERVICE_SECRET=
+    restart: unless-stopped
+    container_name: report_microservice
+
