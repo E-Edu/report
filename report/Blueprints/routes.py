@@ -3,6 +3,7 @@ from jinja2 import TemplateNotFound
 from report.database import Ticket
 from report import db
 import jwt
+import os
 main_page = Blueprint('main-routes', __name__)
 
 
@@ -23,19 +24,21 @@ def ticked_create():
     except Exception:
         return jsonify({'error':'Invalid Session'}),510
     
-    
+    ticket = Ticket(data['task_id'],data['title'],data['body'],data['TicketType'])
+    db.session.add(ticket)
+    db.session.commit()
     return "hello World"
 
 @main_page.route('/ticket/delete/<id>', methods=['DELETE'])
 def ticked_delete(id):
-
-
-    session_allow = True
-
-    if session_allow:
-        ticket = Ticket.query.get(id)
-        db.session.delete(ticket)
-        db.session.commit()
+    try:
+        userdata = jwt.decode(data['session'],os.environ.get('JWT_SECRET') , algorithms=['ES256'])
+    except Exception:
+        return jsonify({'error':'Invalid Session'}),510
+    
+    ticket = Ticket.query.get(id)
+    db.session.delete(ticket)
+    db.session.commit()
 
 @main_page.route('/ticket/list')
 def ticked_list():
