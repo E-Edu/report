@@ -2,11 +2,26 @@
 import socket
 list = [passwort vergessen, neuer user, wurde geöscht]
 while True:
+  bot = False
   abfrage = input() # Muss noch in seite eingebaut werden
   if list in abfrage:
+    bot = True
+    if list[0] in abfrage:
+      antwort = ("Setze dein Passwort auf (hier müsste dann die Seite rein) zurück")
+    elif list[1] in abfrage:
+      anwort = ("Lege einen neuen user auf der startup seite unter sign up an")
+    elif list[2] in abfrage:
+      antwort = ("Pech gehabt")
   
   else:
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_addr = ("Hier muss der admin rein (als ip)", port von admin)
     client_socket.connect(server_addr)
     client_socket.send(abfrage.encode())
+    client_socket.close
+    
+  if bot = True:
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_addr = ("Hier muss der user rein (als ip)", port von user)
+    client_socket.connect(server_addr)
+    client_socket.send(antwort.encode())
