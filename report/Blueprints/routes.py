@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, abort,request, jsonify
 from jinja2 import TemplateNotFound
 from report.database import Ticket
 from report import db
-
+import jwt
 main_page = Blueprint('main-routes', __name__)
 
 
@@ -20,7 +20,7 @@ def ticked_create():
 
     try:
         userdata = jwt.decode(data['session'],os.environ.get('JWT_SECRET') , algorithms=['ES256'])
-    except Exception as e:
+    except Exception:
         return jsonify({'error':'Invalid Session'}),510
     
     
