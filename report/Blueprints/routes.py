@@ -4,6 +4,7 @@ from report.database import Ticket
 from report import db
 import jwt
 import os
+
 main_page = Blueprint('main-routes', __name__)
 
 
@@ -46,6 +47,24 @@ def ticked_delete(id):
 def ticked_list():
     return jsonify({}), 404
 
-@main_page.route('/ticket/edit')
-def ticked_edit():
-    return jsonify({}), 404
+
+@main_page.route('/ticket/edit/<id>')
+def ticked_edit(id):
+    data = request.json
+    if data is not None and all(key in data for key in ('session', 'task_id', 'title', 'body', 'TicketType')):
+        print("Works")
+    else:
+        return jsonify({'error': 'Missing Keys'}), 510
+
+    try:
+        userdata = jwt.decode(data['session'], os.environ.get('JWT_SECRET'), algorithms=['ES256'])
+    except Exception:
+        return jsonify({'error': 'Invalid Session'}), 510
+    ticked_q = Ticket.query.filter_by(ticketId=id).first()
+    ticked_q.taskId = data['task_Id']
+    ticked_q.title = data['title']
+    ticked_q.body = data['body']
+    ticked_q.TicketType = data['TicketType']
+    db.session.commit()
+    return jsonify({}), 200
+

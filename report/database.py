@@ -1,7 +1,6 @@
 from report import db
 from report import ma
 
-
 class Ticket(db.Model):
     ticketId = db.Column(db.Integer, primary_key=True)
     taskId = db.Column(db.Integer)
