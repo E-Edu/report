@@ -12,12 +12,10 @@ main_page = Blueprint('main-routes', __name__)
 def home():
     return "hello World"
 
-@main_page.route('/ticket/create', methods=['PUT'])
+@main_page.route('/ticket/create', methods=['POST'])
 def ticked_create():
     data = request.json
-    if data is not None and all(key in data for key in ('session', 'task_id','title','body','TicketType')): 
-        print("Works")
-    else:
+    if data is None or !all(key in data for key in ('session', 'task_id','title','body','TicketType')): 
         return jsonify({'error':'Missing Keys'}),400
 
     try:
@@ -38,9 +36,12 @@ def ticked_delete(id):
     except Exception:
         return jsonify({'error':'INVALID_SESSION'}),400
     
-    ticket = Ticket.query.get(id)
-    db.session.delete(ticket)
-    db.session.commit()
+    try:
+        ticket = Ticket.query.get(id)
+        db.session.delete(ticket)
+        db.session.commit()
+    except Exception:
+        return return jsonify({'error':'INVALID_SESSION'}),500
     return jsonify({}), 200
 
 @main_page.route('/ticket/list')
@@ -61,10 +62,13 @@ def ticked_edit(id):
     except Exception:
         return jsonify({'error': 'Invalid Session'}), 510
     ticked_q = Ticket.query.filter_by(ticketId=id).first()
-    ticked_q.taskId = data['task_Id']
-    ticked_q.title = data['title']
-    ticked_q.body = data['body']
-    ticked_q.TicketType = data['TicketType']
-    db.session.commit()
-    return jsonify({}), 200
+    if ticked_q is not None:
+        ticked_q.taskId = data['task_Id']
+        ticked_q.title = data['title']
+        ticked_q.body = data['body']
+        ticked_q.TicketType = data['TicketType']
+        db.session.commit()
+        return jsonify({}), 200
+    else:
+        return jsonify({}), 500
 

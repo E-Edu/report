@@ -9,4 +9,4 @@ def handle_404_error(e):
 
 @app_error.app_errorhandler(405)
 def handle_405_error(e):
-    return jsonify({'error':'Method not allowed'}),404
+    return jsonify({'error':'Method not allowed'}),405

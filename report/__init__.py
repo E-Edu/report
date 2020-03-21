@@ -10,7 +10,7 @@ try:
     db_path = "mysql://" + os.environ.get("DATABASE_USERNAME") + ":" + os.environ.get("DATABASE_PASSWORD") + "@" + os.environ.get("DATABASE_HOSTNAME") + ":" + os.environ.get("DATABASE_PORT") + "/" + os.environ.get("DATABASE_DATABASE")
     app.config['SQLALCHEMY_DATABASE_URI'] = db_path
 except TypeError:
-    sys.exit(0)
+    sys.exit(1)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
