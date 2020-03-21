@@ -13,19 +13,29 @@ def home():
 @main_page.route('/ticket/create', methods=['PUT'])
 def ticked_create():
     data = request.json
-    if all(key in data for key in ('session', 'task_id','title','body','TicketType')): 
+    if data is not None and all(key in data for key in ('session', 'task_id','title','body','TicketType')): 
         print("Works")
     else:
         return jsonify({'error':'Missing Keys'}),510
 
-    print(data)
+    try:
+        userdata = jwt.decode(data['session'],os.environ.get('JWT_SECRET') , algorithms=['ES256'])
+    except Exception as e:
+        return jsonify({'error':'Invalid Session'}),510
+    
+    
     return "hello World"
 
 @main_page.route('/ticket/delete/<id>', methods=['DELETE'])
 def ticked_delete(id):
-    ticket = Ticket.query.get(id)
-    db.session.delete(ticket)
-    db.session.commit()
+
+
+    session_allow = True
+
+    if session_allow:
+        ticket = Ticket.query.get(id)
+        db.session.delete(ticket)
+        db.session.commit()
 
 @main_page.route('/ticket/list')
 def ticked_list():
