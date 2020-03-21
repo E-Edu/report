@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, abort,request, jsonify
 from jinja2 import TemplateNotFound
+from report.database import Ticket
+from report import db
 
 main_page = Blueprint('main-routes', __name__)
 
@@ -19,9 +21,11 @@ def ticked_create():
     print(data)
     return "hello World"
 
-@main_page.route('/ticket/delete/<id>')
+@main_page.route('/ticket/delete/<id>', methods=['DELETE'])
 def ticked_delete(id):
-    return "hello World"
+    ticket = Ticket.query.get(id)
+    db.session.delete(ticket)
+    db.session.commit()
 
 @main_page.route('/ticket/list')
 def ticked_list():
