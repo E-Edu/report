@@ -18,12 +18,15 @@ report_database:
 report_microservice:
     image: eedu/reportms
     ports: 
-        - 80:80
+        - 5000:5000
     environment: 
-        - MYSQL_HOST=None
-        - MYSQL_USER=None
-        - MYSQL_PASSWORD=None
-        - MYSQL_DATABASE=NOne
+        - DATABASE_HOSTNAME=
+        - DATABASE_PORT=
+        - DATABASE_USERNAME=
+        - DATABASE_PASSWORD=
+        - DATABASE_DATABASE=
+        - JWT_SECRET=
+        - SERVICE_SECRET=
     restart: unless-stopped
     container_name: report_microservice
 

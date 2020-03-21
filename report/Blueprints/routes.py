@@ -18,30 +18,35 @@ def ticked_create():
     if data is not None and all(key in data for key in ('session', 'task_id','title','body','TicketType')): 
         print("Works")
     else:
-        return jsonify({'error':'Missing Keys'}),510
+        return jsonify({'error':'Missing Keys'}),400
 
     try:
         userdata = jwt.decode(data['session'],os.environ.get('JWT_SECRET') , algorithms=['ES256'])
     except Exception:
-        return jsonify({'error':'Invalid Session'}),510
+        return jsonify({'error':'INVALID_SESSION'}),400
     
-    
-    return "hello World"
+    ticket = Ticket(data['task_id'],data['title'],data['body'],data['TicketType'])
+    db.session.add(ticket)
+    db.session.commit()
+    return jsonify({}), 200
 
 @main_page.route('/ticket/delete/<id>', methods=['DELETE'])
 def ticked_delete(id):
-
-
-    session_allow = True
-
-    if session_allow:
-        ticket = Ticket.query.get(id)
-        db.session.delete(ticket)
-        db.session.commit()
+    data = request.headers.get('session')
+    try:
+        userdata = jwt.decode(data['session'],os.environ.get('JWT_SECRET') , algorithms=['ES256'])
+    except Exception:
+        return jsonify({'error':'INVALID_SESSION'}),400
+    
+    ticket = Ticket.query.get(id)
+    db.session.delete(ticket)
+    db.session.commit()
+    return jsonify({}), 200
 
 @main_page.route('/ticket/list')
 def ticked_list():
-    return "hello World"
+    return jsonify({}), 404
+
 
 @main_page.route('/ticket/edit/<id>')
 def ticked_edit(id):
@@ -61,4 +66,5 @@ def ticked_edit(id):
     ticked_q.body = data['body']
     ticked_q.TicketType = data['TicketType']
     db.session.commit()
-    return
+    return jsonify({}), 200
+
