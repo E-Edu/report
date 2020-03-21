@@ -80,12 +80,12 @@ def ticked_list():
         return jsonify({}), 500
 
 
-@main_page.route('/ticket/edit/<id>', methods=['PUT'])
+@main_page.route('/ticket/<id>/edit', methods=['PUT'])
 def ticked_edit(id):
     data = request.json
     header = request.headers.get('Authorization')
 
-    if data is not None and all(key in data for key in ('task_id', 'title', 'body', 'TicketType')):
+    if data is not None and all(key in data for key in ('title', 'body')):
         pass
     else:
         return jsonify({'error': 'Missing Keys'}), 510
@@ -105,7 +105,6 @@ def ticked_edit(id):
             ticked_q.taskId = data['task_id']
             ticked_q.title = data['title']
             ticked_q.body = data['body']
-            ticked_q.TicketType = data['TicketType']
             ticked_q.user_id = user_id
             ticked_q.role = role
 
@@ -124,7 +123,6 @@ def ticked_edit(id):
             ticked_q.taskId = data['task_Id']
             ticked_q.title = data['title']
             ticked_q.body = data['body']
-            ticked_q.TicketType = data['TicketType']
             ticked_q.user_id = user_id
             ticked_q.role = role
 
