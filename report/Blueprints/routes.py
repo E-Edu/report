@@ -1,4 +1,4 @@
-from flask import Blueprint,request, jsonify
+from flask import Blueprint, request, jsonify, redirect
 from report.database import Ticket
 from report import db
 import jwt
@@ -8,52 +8,56 @@ import json
 main_page = Blueprint('main-routes', __name__)
 
 
-@main_page.route('/', methods=['POST'])
-def home():
-    return "hello World"
-
 @main_page.route('/ticket/create', methods=['POST'])
 def ticked_create():
     data = request.json
-    if data is None or any(key in data for key in ('session', 'task_id','title','body','TicketType')) is False:
-        return jsonify({'error':'Missing Keys'}),400
+    header = request.headers.get('Authorization')
+    
+    if data is None or header is None or any(key in data for key in ('session', 'task_id', 'title', 'body', 'TicketType')) is False:
+        return jsonify({'error': 'Missing Keys'}), 400
 
     try:
-        userdata = jwt.decode(data['session'],os.environ.get('JWT_SECRET') , algorithms=['ES256'])
+        userdata = jwt.decode(header, os.environ.get(
+            'JWT_SECRET'), algorithms=['ES256'])
     except Exception:
-        return jsonify({'error':'INVALID_SESSION'}),400
+        return jsonify({'error': 'INVALID_SESSION'}), 400
 
     user_id = userdata.get("id")
-    
-    ticket = Ticket(taskid=data['task_id'],title=data['title'],body=data['body'],TicketType=data['TicketType'], user_id=user_id)
+
+    ticket = Ticket(taskid=data['task_id'], title=data['title'],
+                    body=data['body'], TicketType=data['TicketType'], user_id=user_id)
     db.session.add(ticket)
     db.session.commit()
     return jsonify({}), 200
 
+
 @main_page.route('/ticket/delete/<id>', methods=['DELETE'])
 def ticked_delete(id):
-    data = request.headers.get('session')
+    data = request.headers.get('Authorization')
     try:
-        userdata = jwt.decode(data['session'],os.environ.get('JWT_SECRET') , algorithms=['ES256'])
+        userdata = jwt.decode(data['session'], os.environ.get(
+            'JWT_SECRET'), algorithms=['ES256'])
     except Exception:
-        return jsonify({'error':'INVALID_SESSION'}),400
-
+        return jsonify({'error': 'INVALID_SESSION'}), 400
+    
+    if id is None and id > 0:
+        return jsonify({'error': 'MISSING_DATA'}), 400
     try:
         ticket = Ticket.query.get_or_404(id)
         db.session.delete(ticket)
         db.session.commit()
     except Exception:
-        return jsonify({'error':'INVALID_SESSION'}),500
+        return jsonify({'error': 'DATABASE_ERROR'}), 500
     return jsonify({}), 200
+
 
 @main_page.route('/ticket/list')
 def ticked_list():
-    data = request.json
-    if data is None or any(key in data for key in ('session', 'task_id', 'title', 'body', 'TicketType')) is False:
-        return jsonify({'error': 'Missing Keys'}), 400
+    header = request.headers.get('Authorization')
 
     try:
-        userdata = jwt.decode(data['session'], os.environ.get('JWT_SECRET'), algorithms=['ES256'])
+        userdata = jwt.decode(header, os.environ.get(
+            'JWT_SECRET'), algorithms=['ES256'])
     except Exception:
         return jsonify({'error': 'INVALID_SESSION'}), 400
 
@@ -67,16 +71,21 @@ def ticked_list():
     else:
         return jsonify({}), 500
 
+
 @main_page.route('/ticket/edit/<id>', methods=['PUT'])
 def ticked_edit(id):
+
     data = request.json
-    if data is not None and all(key in data for key in ('session', 'task_id', 'title', 'body', 'TicketType')): #! save session
+    header = request.headers.get('Authorization')
+
+    if data is not None and all(key in data for key in ('session', 'task_id', 'title', 'body', 'TicketType')):  # ! save session
         print("Works")
     else:
         return jsonify({'error': 'Missing Keys'}), 510
 
     try:
-        userdata = jwt.decode(data['session'], os.environ.get('JWT_SECRET'), algorithms=['ES256'])
+        userdata = jwt.decode(header, os.environ.get(
+            'JWT_SECRET'), algorithms=['ES256'])
     except Exception:
         return jsonify({'error': 'Invalid Session'}), 510
 
