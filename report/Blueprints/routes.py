@@ -31,6 +31,7 @@ def ticked_create():
 
 @main_page.route('/ticket/delete/<id>', methods=['DELETE'])
 def ticked_delete(id):
+    data = request.headers.get('session')
     try:
         userdata = jwt.decode(data['session'],os.environ.get('JWT_SECRET') , algorithms=['ES256'])
     except Exception:
