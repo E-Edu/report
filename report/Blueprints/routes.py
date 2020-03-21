@@ -13,12 +13,11 @@ def ticked_create():
     data = request.json
     header = request.headers.get('Authorization')
     
-    if data is None or header is None or any(key in data for key in ('session', 'task_id', 'title', 'body', 'TicketType')) is False:
+    if data is None:
         return jsonify({'error': 'Missing Keys'}), 400
 
     try:
-        userdata = jwt.decode(header, os.environ.get(
-            'JWT_SECRET'), algorithms=['ES256'])
+        userdata = jwt.decode(header, os.environ.get('JWT_SECRET'), algorithms=['ES256'])
     except Exception:
         return jsonify({'error': 'INVALID_SESSION'}), 400
 
@@ -38,24 +37,7 @@ def ticked_delete(id):
         userdata = jwt.decode(data['session'], os.environ.get(
             'JWT_SECRET'), algorithms=['ES256'])
     except Exception:
-<<<<<<< HEAD
-        return jsonify({'error':'INVALID_SESSION'}),400
 
-    user_id = userdata.get('id')
-    role = userdata.get('role')
-
-    ticket = Ticket.query.get_or_404(id)
-
-    if user_id != ticket.user_id:
-            return jsonify({'forbidden': 'wrong user id'}), 403
-    else:
-        try:
-            db.session.delete(ticket)
-            db.session.commit()
-        except Exception:
-            return jsonify({'error':'INVALID_SESSION'}),500
-    
-=======
         return jsonify({'error': 'INVALID_SESSION'}), 400
     
     if id is None and id > 0:
@@ -66,7 +48,7 @@ def ticked_delete(id):
         db.session.commit()
     except Exception:
         return jsonify({'error': 'DATABASE_ERROR'}), 500
->>>>>>> 882004c327e973984665abda9a4fbfd6e915a8cf
+
     return jsonify({}), 200
 
 
@@ -95,13 +77,7 @@ def ticked_list():
 def ticked_edit(id):
 
     data = request.json
-<<<<<<< HEAD
     if data is not None and all(key in data for key in ('session', 'task_id', 'title', 'body', 'TicketType')):
-=======
-    header = request.headers.get('Authorization')
-
-    if data is not None and all(key in data for key in ('session', 'task_id', 'title', 'body', 'TicketType')):  # ! save session
->>>>>>> 882004c327e973984665abda9a4fbfd6e915a8cf
         print("Works")
     else:
         return jsonify({'error': 'Missing Keys'}), 510

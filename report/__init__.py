@@ -12,6 +12,8 @@ try:
     app.config['SQLALCHEMY_DATABASE_URI'] = db_path
 except TypeError:
     sys.exit(1)
+
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
