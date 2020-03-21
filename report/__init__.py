@@ -1,14 +1,20 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+import os
+import sys
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+try:
+    db_path = "mysql://" + os.environ.get("DATABASE_USERNAME") + ":" + os.environ.get("DATABASE_PASSWORD") + "@" + os.environ.get("DATABASE_HOSTNAME") + ":" + os.environ.get("DATABASE_PORT") + "/" + os.environ.get("DATABASE_DATABASE")
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_path
+except TypeError:
+    sys.exit(0)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
-
 
 
 
