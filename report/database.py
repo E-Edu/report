@@ -7,6 +7,8 @@ class Ticket(db.Model):
     title = db.Column(db.String)
     body = db.Column(db.String)
     TicketType = db.Column(db.String)
+    role = db.Column(db.String)
+    user_id = db.Column(db.String)
 
     def __init__(self, taskId, title, body, TicketType):
         self.taskId = taskId
@@ -24,4 +26,3 @@ ticketSchema = TicketSchema()
 ticketSchema_many = TicketSchema(many=True)
 
 db.create_all()
-
