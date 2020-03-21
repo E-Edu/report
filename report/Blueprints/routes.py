@@ -8,7 +8,7 @@ import json
 main_page = Blueprint('main-routes', __name__)
 
 
-@main_page.route('/ticket/create', methods=['POST'])
+@main_page.route('/ticket', methods=['POST'])
 def ticked_create():
     data = request.json
     header = request.headers.get('Authorization')
@@ -51,7 +51,7 @@ def ticked_delete(id):
     return jsonify({}), 200
 
 
-@main_page.route('/ticket/list')
+@main_page.route('/ticket/list', methods=['POST'])
 def ticked_list():
     header = request.headers.get('Authorization')
 
