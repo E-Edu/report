@@ -2,11 +2,11 @@
 
 ## Explanations 
 ### Routes
-/ticket
-/ticket/delete/<id>
-/ticket/list
-/ticket/<id>/edit
-/ticket/<id>/answer
+/ticket <br>
+/ticket/delete/id <br>
+/ticket/list <br>
+/ticket/id/edit <br>
+/ticket/id/answer 
 
 ## Documents
 [Drafts & Documentation](https://github.com/E-Edu/draft-documents)<br>
