@@ -1,7 +1,5 @@
-import json
-import os
-
 import jwt
+import os
 from flask import Blueprint, request, jsonify
 
 from report import db
@@ -24,7 +22,7 @@ def ticked_create():
         print(e)
         return jsonify({'error': 'INVALID_SESSION'}), 400
 
-    if userdata.get("status") == 4: # Status 4 == User Banned
+    if userdata.get("status") == 4:  # Status 4 == User Banned
         return jsonify({}), 200
 
     user_id = userdata.get("id")

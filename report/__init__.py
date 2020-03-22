@@ -7,7 +7,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-
 try:
     db_path = "mysql+pymysql://" + os.environ.get("DATABASE_USERNAME") + ":" + os.environ.get(
         "DATABASE_PASSWORD") + "@" + os.environ.get("DATABASE_HOSTNAME") + ":" + os.environ.get(
