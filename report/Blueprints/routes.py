@@ -24,8 +24,10 @@ def ticked_create():
         print(e)
         return jsonify({'error': 'INVALID_SESSION'}), 400
 
-    user_id = userdata.get("id")
+    if userdata.get("status") == 4: # Status 4 == User Banned
+        return jsonify({}), 200
 
+    user_id = userdata.get("id")
     ticket = Ticket(taskId=data['task_id'], title=data['title'],
                     body=data['body'], TicketType=data['TicketType'], user_id=user_id)
     db.session.add(ticket)
@@ -130,3 +132,36 @@ def ticked_edit(id):
             return jsonify({}), 200
         else:
             return jsonify({}), 500
+
+
+@main_page.route('/ticket/<id>/answer', methods=['PUT'])
+def ticked_slove(id):
+    data = request.json
+    header = request.headers.get('Authorization')
+
+    if header is not None and 'is_troll' in data:
+        pass
+    else:
+        return jsonify({'error': 'Missing Keys'}), 510
+
+    try:
+        userdata = jwt.decode(header, os.environ.get(
+            'JWT_SECRET'), algorithms=['HS256'])
+    except Exception:
+        return jsonify({'error': 'Invalid Session'}), 510
+
+    role = userdata.get('role')
+    if role == 2:
+        if data['is_troll']:
+            # TODO: bann user
+            # User Microservice not Ready
+            print("User Banned")
+            return jsonify({}), 500
+        else:
+            ticked_q = Ticket.query.get_or_404(id)
+            if ticked_q is not None:
+                ticked_q.isSloved = True
+            db.session.commit()
+            return jsonify({}), 500
+    else:
+        jsonify({'forbidden': 'INVALID_PERMISSION'}), 403
