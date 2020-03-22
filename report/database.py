@@ -10,6 +10,7 @@ class Ticket(db.Model):
     TicketType = db.Column(db.String(10))
     role = db.Column(db.String(3))
     user_id = db.Column(db.String(1000))  # ! change when >1000 user
+    isSloved = db.Column(db.Boolean(), default=False) 
 
     def __init__(self, taskId, title, body, TicketType, user_id):
         self.taskId = taskId
@@ -21,9 +22,10 @@ class Ticket(db.Model):
 
 class TicketSchema(ma.Schema):
     class Meta:
-        fields = ('ticketId', 'taskId', 'title', 'body', 'TicketType')
+        fields = ('ticketId', 'taskId', 'title', 'body', 'TicketType', 'isSloved')
 
 
 ticketSchema = TicketSchema()
 ticketSchema_many = TicketSchema(many=True)
 db.create_all()
+
