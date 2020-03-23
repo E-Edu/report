@@ -19,6 +19,9 @@ class Ticket(db.Model):
         self.TicketType = TicketType
         self.user_id = user_id
 
+    def __repr__(self):
+    	return f"<Ticket ({self.taskId}, {self.title}, {self.body}, {self.TicketType}, {self.user_id})>"
+
 
 class TicketSchema(ma.Schema):
     class Meta:
