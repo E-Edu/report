@@ -1,31 +1,30 @@
-import os
-import sys
-
 from flask import Flask
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
+from flask_restful import Api
+from report.config import AppConfig
+
+from report.resources.create_tickte import CreateTickte
+from report.resources.delete_ticked import DeleteTicked
+from report.resources.edit_ticked import EditTicked
+from report.resources.list_ticked import ListTicked
+from report.resources.solve_ticked import SolveTicked
+
+import os
+import sys
 
 app = Flask(__name__)
-
-try:
-    db_path = "mysql+pymysql://" + os.environ.get("DATABASE_USERNAME") + ":" + os.environ.get(
-        "DATABASE_PASSWORD") + "@" + os.environ.get("DATABASE_HOSTNAME") + ":" + os.environ.get(
-        "DATABASE_PORT") + "/" + os.environ.get("DATABASE_DATABASE")
-    app.config['SQLALCHEMY_DATABASE_URI'] = db_path
-except TypeError as e:
-    print(e)
-    print("No Environ Var found")
-    sys.exit(1)
-
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config_class(AppConfig)
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+api = Api(app)
 
-db.create_all()
-
-from report.Blueprints.routes import main_page
-from report.Blueprints.error_handler import app_error
-
-app.register_blueprint(main_page)
+from report.error.error_handler import app_error
 app.register_blueprint(app_error)
+
+api.add_resource(CreateTickte, "/ticket")
+api.add_resource(DeleteTicked, "/ticket/<int:ticket_id>")
+api.add_resource(EditTicked, "/ticket/<int:ticket_id>/edit")
+api.add_resource(ListTicked, "/ticket/list")
+api.add_resource(SolveTicked, "/ticket/<int:ticket_id>/answer")
