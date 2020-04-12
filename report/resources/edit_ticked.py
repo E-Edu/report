@@ -26,32 +26,22 @@ class EditTicked(Resource):
 
         if role == 2:
             ticked_q = Ticket.query.get_or_404(ticket_id)
-            if ticked_q is not None:
-                ticked_q.taskId = data['task_id']
+            if ticked_q:
                 ticked_q.title = data['title']
                 ticked_q.body = data['body']
-                ticked_q.user_id = user_id
-                ticked_q.role = role
-
                 db.session.commit()
                 return {}, 200
-            else:
-                return {}, 500
 
-        if role == 1 or role == 0:
+        elif role == 1 or role == 0 or role == 3:
             ticked_q = Ticket.query.get_or_404(ticket_id)
 
             if user_id != ticked_q.user_id:
-                return {'forbidden': 'wrong user id'}, 403
+                return {'error': 'wrong user id'}, 403
 
-            if ticked_q is not None:
-                ticked_q.taskId = data['task_Id']
+            if ticked_q:
                 ticked_q.title = data['title']
                 ticked_q.body = data['body']
-                ticked_q.user_id = user_id
-                ticked_q.role = role
-
                 db.session.commit()
                 return {}, 200
             else:
-                return {}, 500
+                {"error": "missing keys or missing permission"}, 400

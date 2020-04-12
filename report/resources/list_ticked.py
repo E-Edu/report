@@ -7,7 +7,7 @@ from report.config import VenVar
 import jwt
 
 class ListTicked(Resource):
-    def post(self):
+    def get(self):
         header = request.headers.get('Authorization')
 
         try:
@@ -26,5 +26,6 @@ class ListTicked(Resource):
                 a.pop('_sa_instance_state')
                 output.append(a)
             return {"output": output}
+
         else:
-            return {}, 500
+            return {"error": "missing keys or missing permission"}, 400

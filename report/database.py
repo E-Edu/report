@@ -1,30 +1,25 @@
 from report import db
-from report import ma
-
 
 class Ticket(db.Model):
     ticketId = db.Column(db.Integer, primary_key=True)
-    taskId = db.Column(db.String(100))
+    taskId = db.Column(db.String(100)) #? Await GitHub answer
     title = db.Column(db.String(200))
-    body = db.Column(db.String(200))
-    TicketType = db.Column(db.String(10))
-    role = db.Column(db.String(3))
-    user_id = db.Column(db.String(1000))  # ! change when > 1000 user
+    body = db.Column(db.Text)
+    TicketType = db.Column(db.String(10)) #TODO ticket_type??
+    role = db.Column(db.Integer)
+    user_id = db.Column(db.Integer)
     isSloved = db.Column(db.Boolean(), default=False)
 
-    def __init__(self, taskId, title, body, TicketType, user_id):
-        self.taskId = taskId
+    def __init__(self, taskId, title, body, user_id):
+        self.taskId = int(taskId)
         self.title = title
         self.body = body
-        self.TicketType = TicketType
-        self.user_id = user_id
+        self.user_id = int(user_id)
 
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
 
-class TicketSchema(ma.Schema):
-    class Meta:
-        fields = ('ticketId', 'taskId', 'title', 'body', 'TicketType', 'isSloved')
-
-
-ticketSchema = TicketSchema()
-ticketSchema_many = TicketSchema(many=True)
-db.create_all()
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()

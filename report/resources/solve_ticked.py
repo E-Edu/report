@@ -7,11 +7,11 @@ from report.config import VenVar
 import jwt
 
 class SolveTicked(Resource):
-    def put(self, ticked_id):
+    def put(self, ticket_id):
         data = request.json
         header = request.headers.get('Authorization')
 
-        if header is not None and 'is_troll' in data:
+        if header and 'is_troll' in data:
             pass
         else:
             return {'error': 'Missing Keys'}, 400
@@ -24,14 +24,12 @@ class SolveTicked(Resource):
         role = userdata.get('role')
         if role == 2:
             if data['is_troll']:
-                # TODO: bann user
-                # User Microservice not Ready
-                return {}, 501
+                return {"msg": "ticket already markt as troll"}, 200
             else:
-                ticked_q = Ticket.query.get_or_404(ticked_id)
+                ticked_q = Ticket.query.get_or_404(ticket_id)
                 if ticked_q is not None:
                     ticked_q.isSloved = True
                 db.session.commit()
-                return {}, 200
+                return {"msg": "ticket markt as troll"}, 201
         else:
-            return {'forbidden': 'INVALID_PERMISSION'}, 403
+            return {'error': 'INVALID PERMISSION'}, 403

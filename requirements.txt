@@ -3,7 +3,6 @@ pyjwt===1.7.1
 flask_sqlalchemy===2.4.1
 marshmallow-sqlalchemy==0.22.3
 pymysql==0.9.3
-flask-marshmallow
 gunicorn==20.0.4
 Flask-Migrate==2.5.3
 Flask-RESTful==0.3.8

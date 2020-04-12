@@ -18,8 +18,7 @@ class DeleteTicked(Resource):
             return {'error': 'MISSING_DATA'}, 400
         try:
             ticket = Ticket.query.get_or_404(ticket_id)
-            db.session.delete(ticket)
-            db.session.commit()
+            ticket.delete_from_db()
         except Exception:
             return {'error': 'DATABASE_ERROR'}, 500
 

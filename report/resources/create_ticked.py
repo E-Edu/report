@@ -7,10 +7,10 @@ from report.config import VenVar
 import jwt
 
 class CreateTickte(Resource):
-    data = request.json
-    header = request.headers.get('Authorization')
-
     def post(self):
+        data = request.json
+        header = request.headers.get('Authorization')
+
         if data is None:
             return {'error': 'Missing Keys'}, 400
 
@@ -23,9 +23,8 @@ class CreateTickte(Resource):
         if userdata.get("status") == 4:  # Status 4 == User Banned
             return {}, 200
 
-        user_id = userdata.get("id")
-        ticket = Ticket(taskId=data['task_id'], title=data['title'], body=data['body'], TicketType=data['TicketType'], user_id=user_id)
-        db.session.add(ticket)
-        db.session.commit()
+        user_id = userdata.get("user_id")
+        ticket = Ticket(taskId=data['task_id'], title=data['title'], body=data['body'], user_id=user_id)
+        ticket.save_to_db()
         
-        return {}, 200
+        return {'success': 'ticket created'}, 200
