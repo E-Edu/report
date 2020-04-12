@@ -1,7 +1,8 @@
 from report import db
+from datetime import datetime
 
 class Ticket(db.Model):
-    ticketId = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     taskId = db.Column(db.String(100)) #? Await GitHub answer
     title = db.Column(db.String(200))
     body = db.Column(db.Text)
@@ -9,6 +10,7 @@ class Ticket(db.Model):
     role = db.Column(db.Integer)
     user_id = db.Column(db.Integer)
     isSloved = db.Column(db.Boolean(), default=False)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __init__(self, taskId, title, body, user_id):
         self.taskId = int(taskId)
