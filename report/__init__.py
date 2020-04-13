@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from report.config import AppConfig
@@ -18,7 +17,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = AppConfig.SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = AppConfig.SQLALCHEMY_TRACK_MODIFICATIONS
 
 db = SQLAlchemy(app)
-ma = Marshmallow(app)
 api = Api(app)
 
 @app.before_first_request
