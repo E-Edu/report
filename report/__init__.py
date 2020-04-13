@@ -4,9 +4,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from report.config import AppConfig
 
-import os
-import sys
-
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
+""" #TODO activate if sentry works
+sentry_sdk.init(
+    dsn="https://<key>@<organization>.ingest.sentry.io/<project>",
+    integrations=[FlaskIntegration()]
+)
+"""
 app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = AppConfig.SQLALCHEMY_DATABASE_URI

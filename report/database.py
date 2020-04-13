@@ -24,4 +24,7 @@ class Ticket(db.Model):
 
     def delete_from_db(self):
         db.session.delete(self)
-        db.session.commit()
+        db.session.commit() 
+
+    def __repr__(self):
+	return f"<Ticket ({self.taskId}, {self.title}, {self.body}, {self.TicketType}, {self.user_id})>"
