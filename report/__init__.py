@@ -7,7 +7,7 @@ from report.config import AppConfig
 import os
 import sys
 
-app = Flask(__name__) #TODO Delete all default ops in os.environ
+app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = AppConfig.SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = AppConfig.SQLALCHEMY_TRACK_MODIFICATIONS
