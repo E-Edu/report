@@ -3,20 +3,23 @@ from datetime import datetime
 
 class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    taskId = db.Column(db.String(100)) #? Await GitHub answer
-    title = db.Column(db.String(200))
+    task_id = db.Column(db.Text)
+    title = db.Column(db.Text)
     body = db.Column(db.Text)
-    TicketType = db.Column(db.String(10)) #TODO ticket_type??
+    ticket_type = db.Column(db.Text)
+    ticket_id = db.Column(db.Text)
     role = db.Column(db.Integer)
     user_id = db.Column(db.Integer)
-    isSloved = db.Column(db.Boolean(), default=False)
+    isSloved = db.Column(db.Boolean, default=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-    def __init__(self, taskId, title, body, user_id):
-        self.taskId = int(taskId)
+    def __init__(self, title, body, user_id, ticket_type, ticket_id, task_id):
+        self.task_id = task_id
         self.title = title
         self.body = body
-        self.user_id = int(user_id)
+        self.user_id = user_id
+        self.ticket_type = ticket_type
+        self.ticket_id = ticket_id
 
     def save_to_db(self):
         db.session.add(self)
@@ -27,4 +30,4 @@ class Ticket(db.Model):
         db.session.commit() 
 
     def __repr__(self):
-	return f"<Ticket ({self.taskId}, {self.title}, {self.body}, {self.TicketType}, {self.user_id})>"
+    	return f"<Ticket ({self.task_id}, {self.title}, {self.body}, {self.TicketType}, {self.user_id})>"

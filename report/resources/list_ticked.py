@@ -27,8 +27,10 @@ class ListTicked(Resource):
                 a = i.__dict__
                 a.pop('_sa_instance_state')
                 a.pop("date")
+                a.pop("isSloved")
+                a.pop("role")
                 output.append(a)
-            return {"output": output}
+            return {"data": output}
 
         else:
             return response(400, Status.c_400, path, "missing keys or missing permission")
