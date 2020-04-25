@@ -14,7 +14,7 @@ class ProductionConfig(Config):
 
 
 class TestingConfig(Config):
-    SQLALCHEMY_DATABASE_URI = f'mysql+psycopg2://root:@localhost:3306/report'
+    SQLALCHEMY_DATABASE_URI = "sqlite:///"
 
 class VenVar:
     JWT_SEC = os.environ.get("JWT_Secret")

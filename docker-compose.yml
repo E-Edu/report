@@ -29,16 +29,7 @@ services:
         - "./:/app"
       restart: unless-stopped
       container_name: report_ms
+      ports: 
+        - "5000:5000"
       depends_on: 
         - report_database
-    
-    nginx:
-      image: report-nginx
-      build:
-        context: .
-        dockerfile: Dockerfile-nginx
-      ports:
-        - 5000:80
-      container_name: report_nginx
-      depends_on:
-        - report_ms

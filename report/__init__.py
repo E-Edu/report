@@ -29,9 +29,6 @@ def create_app():
     from report.error.error_handler import app_error
     app.register_blueprint(app_error)
 
-    from report.routes.index import home
-    app.register_blueprint(home)
-
     db.init_app(app)
     @app.before_first_request
     def init_tables():
