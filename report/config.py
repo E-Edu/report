@@ -1,22 +1,21 @@
-import os
-import sys
+import os, psycopg2
 
-
-class AppConfig:
-    try:
-        SQLALCHEMY_DATABASE_URI = "mysql+pymysql://" + os.getenv("DATABASE_USERNAME", "root") + ":" + os.getenv(
-                "DATABASE_PASSWORD", "") + "@" + os.getenv("DATABASE_HOSTNAME", "localhost") + ":" + os.getenv(
-                "DATABASE_PORT", "3306") + "/" + os.getenv("DATABASE_DATABASE", "report")
-    except:
-        print("missing environment var (db)")
-        sys.exit(1)
-    
+class Config(object):
+    SECRET_KEY = os.environ.get("MS_Secret")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+class ProductionConfig(Config):
+    username = os.environ.get('DB_USERNAME')
+    password = os.environ.get('DB_PASSWORD')
+    hostname = os.environ.get('DB_HOSTNAME')
+    port = 5432
+    database = os.environ.get('DB_DATABASE')
+    SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg2://{username}:{password}@{hostname}:{port}/{database}'
+
+
+class TestingConfig(Config):
+    SQLALCHEMY_DATABASE_URI = f'mysql+psycopg2://root:@localhost:3306/report'
+
 class VenVar:
-    try:
-        JWT_SEC = os.getenv('JWT_SECRET', "test")
-    except:
-        print("missing environment var (jwt)")
-        sys.exit(1)
+    JWT_SEC = os.environ.get("JWT_Secret")
     JWT_ALGORITHMS = algorithms=['HS512']

@@ -3,31 +3,42 @@ version: '3.7'
 services:
 
     report_database:
-      image: mariadb:latest
-      volumes:
-        - /var/data/mariadb:/var/lib/mysql/
+      image: postgres:latest
       environment:
-        - MYSQL_ROOT_PASSWORD=da7tnqw79e5v6nbqw3v5rtwev57mtwm5vrftw75vfnm275v2  #change bevore deploy
-        - MYSQL_USER=report
-        - MYSQL_PASSWORD=TuqWuRdjLbSPTRqBnnEU24ZSsqAy9b6LbXA8ZuQg  #change bevore deploy
-        - MYSQL_DATABASE=report
+        - POSTGRES_DB=report
+        - POSTGRES_USER=report
+        - POSTGRES_PASSWORD=test
       restart: unless-stopped
       container_name: report_database
       hostname: report_database
 
-    report_microservice:
-      image: eedu/reportms
-      ports:
-        - 5000:5000
+    report_ms:
+      image: report-ms
       environment:
-        - DATABASE_HOSTNAME=report_database
-        - DATABASE_PORT=3306
-        - DATABASE_USERNAME=report
-        - DATABASE_PASSWORD=TuqWuRdjLbSPTRqBnnEU24ZSsqAy9b6LbXA8ZuQg  #change bevore deploy
-        - DATABASE_DATABASE=report
-        - JWT_SECRET=test     #change bevore deploy
-        - SERVICE_SECRET=test #change bevore deploy
-      restart: unless-stopped 
-      container_name: report_microservice
-      depends_on:
+        - DB_HOSTNAME=report_database
+        - DB_USERNAME=report
+        - DB_PASSWORD=test  #change bevore deploy
+        - DB_DATABASE=report
+        - conf_mode=deploy
+        - JWT_Secret=test #change bevore deploy
+        - MS_Secret=test #change bevore deploy
+      build:
+        context: .
+        dockerfile: Dockerfile-flask
+      volumes:
+        - "./:/app"
+      restart: unless-stopped
+      container_name: report_ms
+      depends_on: 
         - report_database
+    
+    nginx:
+      image: report-nginx
+      build:
+        context: .
+        dockerfile: Dockerfile-nginx
+      ports:
+        - 5000:80
+      container_name: report_nginx
+      depends_on:
+        - report_ms
