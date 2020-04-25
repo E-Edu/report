@@ -7,7 +7,7 @@ services:
       environment:
         - POSTGRES_DB=report
         - POSTGRES_USER=report
-        - POSTGRES_PASSWORD=test
+        - POSTGRES_PASSWORD=test #! change bevore deploy
       restart: unless-stopped
       container_name: report_database
       hostname: report_database
@@ -17,11 +17,15 @@ services:
       environment:
         - DB_HOSTNAME=report_database
         - DB_USERNAME=report
-        - DB_PASSWORD=test  #change bevore deploy
+        - DB_PASSWORD=test  #! change bevore deploy
         - DB_DATABASE=report
         - conf_mode=deploy
-        - JWT_Secret=test #change bevore deploy
-        - MS_Secret=test #change bevore deploy
+        - JWT_Secret=test #! change bevore deploy
+        - MS_Secret=test #! change bevore deploy
+        #? add sentry data
+        - SENTRY_KEY=
+        - SENTRY_ORGANIZATION=
+        - SENTRY_PROJECT=
       build:
         context: .
         dockerfile: Dockerfile-flask

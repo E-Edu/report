@@ -2,17 +2,16 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from report.config import ProductionConfig, TestingConfig
-import os, psycopg2
-
-import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
+import os, psycopg2, sentry_sdk
 
-""" #TODO activate if sentry works and add right values
+SENTRY_KEY = os.environ.get("SENTRY_KEY")
+SENTRY_ORGANIZATION = os.environ.get("SENTRY_ORGANIZATION")
+SENTRY_PROJECT = os.environ.get("SENTRY_PROJECT")
 sentry_sdk.init(
-    dsn="https://<key>@<organization>.ingest.sentry.io/<project>",
+    dsn=f"https://{SENTRY_KEY}@{SENTRY_ORGANIZATION}.ingest.sentry.io/{SENTRY_PROJECT}",
     integrations=[FlaskIntegration()]
 )
-"""
 
 db = SQLAlchemy()
 api = Api()
