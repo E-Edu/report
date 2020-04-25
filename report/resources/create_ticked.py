@@ -13,6 +13,7 @@ class CreateTickte(Resource):
         parser.add_argument("title", type=str, help="title can not be blank")
         parser.add_argument("body", type=str, help="body can not be blank")
         parser.add_argument("ticket_type", type=str, help="ticket_type can not be blank")
+        parser.add_argument("report_reason", type=str, help="report_reason can not be blank")
         path = "/ticket"
         header = request.headers.get('Authorization')
         data = parser.parse_args()
@@ -24,6 +25,6 @@ class CreateTickte(Resource):
         if userdata.get("status") == 3:  #? Status 3 == User Banned
             return response(200, Status.c_200, path)
         user_id = userdata.get("user_id")
-        ticket = Ticket(task_id=data["task_id"], title=data["title"], body=data["body"], ticket_type=data["ticket_type"], user_id=userdata["id"], role=userdata["role"])
+        ticket = Ticket(task_id=data["task_id"], title=data["title"], body=data["body"], ticket_type=data["ticket_type"], user_id=userdata["id"], role=userdata["role"], report_reason=data["report_reason"])
         ticket.save_to_db()
-        return response(200, Status.c_200, path, "ticket successfully added")
+        return response(201, Status.c_201, path, "ticket successfully added")

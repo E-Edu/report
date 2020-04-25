@@ -8,10 +8,12 @@ import os, psycopg2, sentry_sdk
 SENTRY_KEY = os.environ.get("SENTRY_KEY")
 SENTRY_ORGANIZATION = os.environ.get("SENTRY_ORGANIZATION")
 SENTRY_PROJECT = os.environ.get("SENTRY_PROJECT")
-sentry_sdk.init(
-    dsn=f"https://{SENTRY_KEY}@{SENTRY_ORGANIZATION}.ingest.sentry.io/{SENTRY_PROJECT}",
-    integrations=[FlaskIntegration()]
-)
+ALL_SENTRY_VALUES_SET = os.environ.get("ALL_SENTRY_VALUES_SET")
+if ALL_SENTRY_VALUES_SET == "added":
+    sentry_sdk.init(
+        dsn=f"https://{SENTRY_KEY}@{SENTRY_ORGANIZATION}.ingest.sentry.io/{SENTRY_PROJECT}",
+        integrations=[FlaskIntegration()]
+    )
 
 db = SQLAlchemy()
 api = Api()

@@ -26,9 +26,8 @@ services:
         - SENTRY_KEY=
         - SENTRY_ORGANIZATION=
         - SENTRY_PROJECT=
-      build:
-        context: .
-        dockerfile: Dockerfile-flask
+        - ALL_SENTRY_VALUES_SET=test #! set to added if sentry data set
+      build: .
       volumes:
         - "./:/app"
       restart: unless-stopped

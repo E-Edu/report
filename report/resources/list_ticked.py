@@ -26,8 +26,9 @@ class ListTicked(Resource):
                     a.pop("date")
                     a.pop("isSloved")
                     a.pop("role")
+                    a.pop("report_reason")
                     output.append(a)
-                return output
+                return output, 200
             else:
                 return response(403, Status.c_403, path, "missing permission")
         except:
