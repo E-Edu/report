@@ -17,6 +17,17 @@ sentry_sdk.init(
 db = SQLAlchemy()
 api = Api()
 
+from report.resources.create_ticked import CreateTickte
+from report.resources.delete_ticked import DeleteTicked
+from report.resources.edit_ticked import EditTicked
+from report.resources.list_ticked import ListTicked
+from report.resources.solve_ticked import SolveTicked
+api.add_resource(CreateTickte, "/ticket")
+api.add_resource(DeleteTicked, "/ticket/<int:ticket_id>")
+api.add_resource(EditTicked, "/ticket/<int:ticket_id>/edit")
+api.add_resource(ListTicked, "/ticket/list")
+api.add_resource(SolveTicked, "/ticket/<int:ticket_id>/answer")
+
 def create_app():
     app = Flask(__name__)
 
@@ -34,16 +45,6 @@ def create_app():
     def init_tables():
         db.create_all()
 
-    from report.resources.create_ticked import CreateTickte
-    from report.resources.delete_ticked import DeleteTicked
-    from report.resources.edit_ticked import EditTicked
-    from report.resources.list_ticked import ListTicked
-    from report.resources.solve_ticked import SolveTicked
     api.init_app(app)
-    api.add_resource(CreateTickte, "/ticket")
-    api.add_resource(DeleteTicked, "/ticket/<int:ticket_id>")
-    api.add_resource(EditTicked, "/ticket/<int:ticket_id>/edit")
-    api.add_resource(ListTicked, "/ticket/list")
-    api.add_resource(SolveTicked, "/ticket/<int:ticket_id>/answer")
 
     return app
