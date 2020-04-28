@@ -10,6 +10,8 @@ class ResponseTest(TestCase):
         res400c2 = response(400, Status.c_400, "/", Status.cm_2)
         res401 = response(401, Status.c_401, "/")
         res403 = response(403, Status.c_403, "/")
+        res404 = response(404, Status.c_404, "/")
+        res405 = response(405, Status.c_405, "/")
         res500 = response(500, Status.c_500, "/")
         res501 = response(501, Status.c_501, "/")
 
@@ -20,5 +22,7 @@ class ResponseTest(TestCase):
         self.assertIsNotNone(res400c2)
         self.assertIsNotNone(res401)
         self.assertIsNotNone(res403)
+        self.assertIsNotNone(res404)
+        self.assertIsNotNone(res405)
         self.assertIsNotNone(res500)
         self.assertIsNotNone(res501)

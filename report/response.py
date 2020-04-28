@@ -17,6 +17,8 @@ class Status():
     c_400 = "Bad Request"
     c_401 = "Unauthorized"
     c_403 = "Forbidden"
+    c_404 = "Not Found"
+    c_405 = "Method Not Allowed"
 
     c_500 = "Internal Server Error"
     c_501 = "Not Implemented"

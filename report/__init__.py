@@ -18,16 +18,25 @@ if ALL_SENTRY_VALUES_SET == "added":
 db = SQLAlchemy()
 api = Api()
 
-from report.resources.create_ticked import CreateTickte
-from report.resources.delete_ticked import DeleteTicked
-from report.resources.edit_ticked import EditTicked
-from report.resources.list_ticked import ListTicked
-from report.resources.solve_ticked import SolveTicked
-api.add_resource(CreateTickte, "/ticket")
-api.add_resource(DeleteTicked, "/ticket/<int:ticket_id>")
-api.add_resource(EditTicked, "/ticket/<int:ticket_id>/edit")
-api.add_resource(ListTicked, "/ticket/list")
-api.add_resource(SolveTicked, "/ticket/<int:ticket_id>/answer")
+from report.resources.ticket.create_ticket import CreateTicket
+from report.resources.ticket.delete_ticket import DeleteTicket
+from report.resources.ticket.edit_ticket import EditTicket
+from report.resources.ticket.list_ticket import ListTicket
+from report.resources.ticket.solve_ticket import SolveTicket
+api.add_resource(CreateTicket, "/ticket")
+api.add_resource(DeleteTicket, "/ticket/<ticket_id>")
+api.add_resource(EditTicket, "/ticket/<ticket_id>/edit")
+api.add_resource(ListTicket, "/ticket/list")
+api.add_resource(SolveTicket, "/ticket/<ticket_id>/answer")
+
+from report.resources.support.create_support_ticket import CreateSupportTicket
+from report.resources.support.delete_support_ticket import DeleteSupportTicket
+from report.resources.support.list_support_ticket import ListSupportTicket
+from report.resources.support.edit_support_ticket import EditTicket
+api.add_resource(CreateSupportTicket, "/support")
+api.add_resource(DeleteSupportTicket, "/support/<ticket_id>")
+api.add_resource(ListSupportTicket, "/support/list")
+api.add_resource(EditTicket, "/support/<ticket_id>/edit")
 
 def create_app():
     app = Flask(__name__)

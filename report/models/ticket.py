@@ -1,15 +1,20 @@
+from sqlalchemy.dialects.postgresql import UUID
 from report import db
 from datetime import datetime
+import uuid
 
 class Ticket(db.Model):
-    ticket_id = db.Column(db.Integer, primary_key=True)
-    task_id = db.Column(db.Text)
+    ticket_id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
+    task_id = db.Column(db.String(40))
     title = db.Column(db.Text)
     body = db.Column(db.Text)
     role = db.Column(db.Integer)
     report_reason = db.Column(db.Text)
+    response_title = db.Column(db.Text)
+    response_body = db.Column(db.Text)
     user_id = db.Column(db.Integer)
     isSloved = db.Column(db.Boolean, default=False)
+    support = db.Column(db.Boolean, default=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def save_to_db(self):

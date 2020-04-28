@@ -1,5 +1,5 @@
 from unittest import TestCase
-from report.database import Ticket
+from report.models.ticket import Ticket
 
 class TestTicket(TestCase):
     def test_create_ticket(self):
