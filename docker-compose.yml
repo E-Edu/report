@@ -26,7 +26,7 @@ services:
         - SENTRY_KEY=
         - SENTRY_ORGANIZATION=
         - SENTRY_PROJECT=
-        - ALL_SENTRY_VALUES_SET=test #! set to added if sentry data set
+        - ALL_SENTRY_VALUES_SET=no #! set to added if sentry data set
       build: .
       volumes:
         - "./:/app"

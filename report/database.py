@@ -6,7 +6,6 @@ class Ticket(db.Model):
     task_id = db.Column(db.Text)
     title = db.Column(db.Text)
     body = db.Column(db.Text)
-    ticket_type = db.Column(db.Text)
     role = db.Column(db.Integer)
     report_reason = db.Column(db.Text)
     user_id = db.Column(db.Integer)
