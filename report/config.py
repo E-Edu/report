@@ -1,7 +1,7 @@
 import os, psycopg2
 
 class Config(object):
-    SECRET_KEY = os.environ.get("MS_Secret")
+    SECRET_KEY = os.environ.get("MS_Secret", "test") #TODO
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = False
 
@@ -20,5 +20,5 @@ class TestingConfig(Config):
     DEBUG = True
 
 class VenVar:
-    JWT_SEC = os.environ.get("JWT_Secret", "testing")
+    JWT_SEC = os.environ.get("JWT_Secret", "testing") #TODO
     JWT_ALGORITHMS = algorithms=['HS512']

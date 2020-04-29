@@ -20,17 +20,8 @@ class ListSupportTicket(Resource):
                 all_q = Ticket.query.filter_by(support=True).all()
                 output = []
                 for i in all_q:
-                    a = i.__dict__
-                    a.pop('_sa_instance_state')
-                    a.pop("date")
-                    a.pop("isSloved")
-                    a.pop("role")
-                    a.pop("support")
-                    a.pop("report_reason")
-                    a.pop("task_id")
-                    a.pop("response_title")
-                    a.pop("response_body")
-                    output.append(a)
+                    i.return_support()
+                    output.append(i)
                 return output, 200
             else:
                 return response(403, Status.c_403, request.path, "missing permission"), 403

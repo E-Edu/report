@@ -20,6 +20,12 @@ class Ticket(db.Model):
     isSloved = db.Column(db.Boolean, default=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
+    def return_report(self):
+        return {"ticket_id": self.ticket_id, "task_id": self.task_id, "user_id": self.user_id, "title": self.title, "body": self.body, "report_reason": self.report_reason}
+
+    def return_support(self):
+        return {"ticket_id": self.ticket_id, "task_id": self.task_id, "user_id": self.user_id, "title": self.title, "body": self.body}
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()

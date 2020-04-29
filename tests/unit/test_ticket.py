@@ -10,7 +10,10 @@ class TestTicket(TestCase):
         role=0, 
         report_reason="TROLLING", 
         user_id=1, 
-        isSloved=False
+        isSloved=False,
+        response_title="test t",
+        response_body="test b",
+        support=True
         )
 
         self.assertEqual(ticket.task_id, "1")
@@ -20,3 +23,6 @@ class TestTicket(TestCase):
         self.assertEqual(ticket.report_reason, "TROLLING")
         self.assertEqual(ticket.user_id, 1)
         self.assertEqual(ticket.isSloved, False)
+        self.assertEqual(ticket.response_title, "test t")
+        self.assertEqual(ticket.response_body, "test b")
+        self.assertEqual(ticket.support, True)
