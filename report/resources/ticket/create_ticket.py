@@ -18,9 +18,9 @@ class CreateTicket(Resource):
         try:
             userdata = jwt.decode(header, VenVar.JWT_SEC, VenVar.JWT_ALGORITHMS)
         except:
-            return response(401, Status.c_401, request.path, Status.cm_1)
+            return response(401, Status.c_401, request.path, Status.cm_1), 401
         if userdata.get("status") == 3:  #? Status 3 == User Banned
-            return response(200, Status.c_200, request.path)
-        ticket = Ticket(task_id=data["task_id"], title=data["title"], body=data["body"], user_id=userdata["id"], role=userdata["role"], report_reason=data["report_reason"])
+            return response(200, Status.c_200, request.path), 200
+        ticket = Ticket(task_id=data["task_id"], title=data["title"], body=data["body"], user_id=str(userdata["id"]), role=userdata["role"], report_reason=data["report_reason"])
         ticket.save_to_db()
-        return response(201, Status.c_201, request.path, "report ticket successfully added")
+        return response(201, Status.c_201, request.path, "report ticket successfully added"), 201

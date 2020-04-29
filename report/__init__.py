@@ -32,11 +32,11 @@ api.add_resource(SolveTicket, "/ticket/<ticket_id>/answer")
 from report.resources.support.create_support_ticket import CreateSupportTicket
 from report.resources.support.delete_support_ticket import DeleteSupportTicket
 from report.resources.support.list_support_ticket import ListSupportTicket
-from report.resources.support.edit_support_ticket import EditTicket
+from report.resources.support.edit_support_ticket import EditSupportTicket
 api.add_resource(CreateSupportTicket, "/support")
 api.add_resource(DeleteSupportTicket, "/support/<ticket_id>")
 api.add_resource(ListSupportTicket, "/support/list")
-api.add_resource(EditTicket, "/support/<ticket_id>/edit")
+api.add_resource(EditSupportTicket, "/support/<ticket_id>/edit")
 
 def create_app():
     app = Flask(__name__)
@@ -53,6 +53,7 @@ def create_app():
     db.init_app(app)
     @app.before_first_request
     def init_tables():
+        #db.drop_all()
         db.create_all()
 
     api.init_app(app)

@@ -16,29 +16,29 @@ class EditTicket(Resource):
         try:
             userdata = jwt.decode(header, VenVar.JWT_SEC, VenVar.JWT_ALGORITHMS)
         except:
-            return response(401, Status.c_401, request.path, Status.cm_1)
+            return response(401, Status.c_401, request.path, Status.cm_1), 401
         user_id = userdata.get('id')
         role = userdata.get('role')
         if data["title"] == None or data["body"] == None:
-            return response(400, Status.c_400, request.path, Status.cm_2)
+            return response(400, Status.c_400, request.path, Status.cm_2), 400
         try:
             try:
                 ticked_q = Ticket.query.get_or_404(ticket_id)
             except:
-                return response(400, Status.c_400, request.path, "invalid ticket_id")
+                return response(400, Status.c_400, request.path, "invalid ticket_id"), 400
             if role == 2:
                 ticked_q.title = data['title']
                 ticked_q.body = data['body']
                 db.session.commit()
-                return response(200, Status.c_200, request.path, "ticket successfully edit")
+                return response(200, Status.c_200, request.path, "ticket successfully edit"), 200
             if user_id != ticked_q.user_id:
-                return response(403, Status.c_403, request.path, "wrong identity or missing permission")
+                return response(403, Status.c_403, request.path, "wrong identity or missing permission"), 403
             if user_id:
                 ticked_q.title = data['title']
                 ticked_q.body = data['body']
                 db.session.commit()
-                return response(200, Status.c_200, request.path, "ticket successfully edit")
+                return response(200, Status.c_200, request.path, "ticket successfully edit"), 200
             else:
-                return response(400, Status.c_400, request.path)
+                return response(400, Status.c_400, request.path), 400
         except:
-            return response(400, Status.c_400, request.path, Status.cm_2)
+            return response(400, Status.c_400, request.path, Status.cm_2), 400

@@ -15,9 +15,10 @@ class ProductionConfig(Config):
 
 
 class TestingConfig(Config):
-    SQLALCHEMY_DATABASE_URI = "sqlite:///"
+    passwd = os.environ.get("passwd")
+    SQLALCHEMY_DATABASE_URI = f"postgresql+psycopg2://postgres:devdev@localhost:5432/report"
     DEBUG = True
 
 class VenVar:
-    JWT_SEC = os.environ.get("JWT_Secret")
+    JWT_SEC = os.environ.get("JWT_Secret", "testing")
     JWT_ALGORITHMS = algorithms=['HS512']

@@ -16,18 +16,18 @@ class SolveTicket(Resource):
         try:
             userdata = jwt.decode(header, VenVar.JWT_SEC, VenVar.JWT_ALGORITHMS)
         except:
-            return response(401, Status.c_401, request.path, Status.cm_1)
+            return response(401, Status.c_401, request.path, Status.cm_1), 401
         if not data["response_title"] or not data["response_body"]:
-            return response(400,  Status.c_400, request.path, Status.cm_2)
+            return response(400,  Status.c_400, request.path, Status.cm_2), 400
         role = userdata.get('role')
         try:
             ticket_q = Ticket.query.get_or_404(ticket_id)
         except:
-            return response(400, Status.c_400, request.path, "invalid ticket_id")
+            return response(400, Status.c_400, request.path, "invalid ticket_id"), 400
         if role == 2 and ticket_q:
             ticket_q.response_title = data["response_title"]
             ticket_q.response_body = data["response_body"]
             db.session.commit()
-            return response(200, Status.c_200, request.path)
+            return response(200, Status.c_200, request.path), 200
         else:
-            return response(403, Status.c_403, request.path, "permission denied")
+            return response(403, Status.c_403, request.path, "permission denied"), 403

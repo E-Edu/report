@@ -15,20 +15,20 @@ class SolveTicket(Resource):
         try:
             userdata = jwt.decode(header, VenVar.JWT_SEC, VenVar.JWT_ALGORITHMS)
         except:
-            return response(401, Status.c_401, request.path, Status.cm_1)
+            return response(401, Status.c_401, request.path, Status.cm_1), 401
         if not data["is_troll"] or data["is_troll"] != True:
-            return response(400,  Status.c_400, request.path, Status.cm_2)
+            return response(400,  Status.c_400, request.path, Status.cm_2), 400
         role = userdata.get('role')
         try:
             ticket_q = Ticket.query.get_or_404(ticket_id)
         except:
-            return response(400, Status.c_400, request.path, "invalid ticket_id")
+            return response(400, Status.c_400, request.path, "invalid ticket_id"), 400
         if role == 2 and ticket_q:
             if ticket_q.isSloved:
-                return response(200, Status.c_200, request.path, "ticket already markt as troll")
+                return response(200, Status.c_200, request.path, "ticket already markt as troll"), 200
             else:
                 ticket_q.isSloved = True
                 db.session.commit()
-                return response(200, Status.c_200, request.path, "ticket markt as troll")
+                return response(200, Status.c_200, request.path, "ticket markt as troll"), 200
         else:
-            return response(403, Status.c_403, request.path, "permission denied")
+            return response(403, Status.c_403, request.path, "permission denied"), 403

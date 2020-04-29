@@ -8,7 +8,7 @@ def response(code, status, path, msg=None):
         "timestamp": time,
         "path": path,
         "msg": msg
-    }, code
+    }
 
 class Status():
     c_200 = "OK"

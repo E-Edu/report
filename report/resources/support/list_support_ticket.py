@@ -12,7 +12,7 @@ class ListSupportTicket(Resource):
         try:
             userdata = jwt.decode(header, VenVar.JWT_SEC, VenVar.JWT_ALGORITHMS)
         except Exception:
-            return response(401, Status.c_401, request.path, Status.cm_1)
+            return response(401, Status.c_401, request.path, Status.cm_1), 401
         user_id = userdata.get("id")
         role = userdata.get("role")
         try:
@@ -27,9 +27,12 @@ class ListSupportTicket(Resource):
                     a.pop("role")
                     a.pop("support")
                     a.pop("report_reason")
+                    a.pop("task_id")
+                    a.pop("response_title")
+                    a.pop("response_body")
                     output.append(a)
                 return output, 200
             else:
-                return response(403, Status.c_403, request.path, "missing permission")
+                return response(403, Status.c_403, request.path, "missing permission"), 403
         except:
-            return response(400, Status.c_400, request.path, Status.cm_2)
+            return response(400, Status.c_400, request.path, Status.cm_2), 400
