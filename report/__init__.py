@@ -17,7 +17,7 @@ if ALL_SENTRY_VALUES_SET == "added":
 
 db = SQLAlchemy()
 api = Api()
-
+ 
 from report.resources.ticket.create_ticket import CreateTicket
 from report.resources.ticket.delete_ticket import DeleteTicket
 from report.resources.ticket.edit_ticket import EditTicket
