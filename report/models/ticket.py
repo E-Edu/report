@@ -1,7 +1,7 @@
 from sqlalchemy.dialects.postgresql import UUID
 from report import db
 from datetime import datetime
-import uuid
+import uuid, json
 
 def generate_uuid():
     return str(uuid.uuid4())
@@ -32,7 +32,4 @@ class Ticket(db.Model):
 
     def delete_from_db(self):
         db.session.delete(self)
-        db.session.commit() 
-
-    def __repr__(self):
-	    return f"<Ticket (ticket_id {self.ticket_id}, task_id {self.task_id}, user_id {self.user_id}, role {self.role}, title {self.title}, report_reason {self.report_reason})>"
+        db.session.commit()
