@@ -15,10 +15,12 @@ class ListSupportTicket(Resource):
             return response(401, Status.c_401, request.path, Status.cm_1), 401
         user_id = userdata.get("id")
         role = userdata.get("role")
+        q = Ticket.query.filter_by(support=True, user_id=user_id).all()
         try:
-            if role == 2:
-                all_q = Ticket.query.filter_by(support=True).all()
-                return [x.return_support() for x in Ticket.query.all()], 200
+            if q:
+                return [x.return_report() for x in q], 200
+            elif role == 2:
+                return [x.return_report() for x in Ticket.query.filter_by(support=True).all()], 200
             else:
                 return response(403, Status.c_403, request.path, "missing permission"), 403
         except:
