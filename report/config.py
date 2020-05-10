@@ -1,7 +1,7 @@
 import os, psycopg2
 
 class Config(object):
-    SECRET_KEY = os.environ.get("MS_Secret", "test") #TODO
+    SECRET_KEY = os.environ.get("MS_Secret", "testing") #TODO
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = False
 
@@ -15,10 +15,9 @@ class ProductionConfig(Config):
 
 
 class TestingConfig(Config):
-    passwd = os.environ.get("passwd")
     SQLALCHEMY_DATABASE_URI = f"postgresql+psycopg2://postgres:devdev@localhost:5432/report"
     DEBUG = True
 
 class VenVar:
-    JWT_SEC = os.environ.get("JWT_Secret", "testing") #TODO
-    JWT_ALGORITHMS = algorithms=['HS512']
+    JWT_SEC = os.environ.get("JWT_Secret", "test") #TODO
+    JWT_ALGORITHMS = 'HS512'
